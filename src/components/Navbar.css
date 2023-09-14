@@ -1,0 +1,42 @@
+.navbar {
+    display: flex;
+    background-image: linear-gradient(to right, rgb(49, 32, 90), rgb(8, 4, 22));
+    color: white;
+    height: 50px;
+    align-items: center;
+    box-shadow: 0 0 0px 2px rgb(132, 123, 155);
+}
+
+.navbar--icon {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-style: normal;
+}
+
+.navbar--link-separator {
+    background-color: rgb(132, 123, 155);
+    width: 2px;
+    height: 50%;
+    border-radius: 4px;
+}
+
+.navbar--link-container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    height: 100%;
+    padding: 0px 10px;
+}
+
+.navbar--link-container:hover {
+    opacity: 90%;
+}
+
+.navbar--link-container a {
+    color: white;
+    text-decoration: none;
+}

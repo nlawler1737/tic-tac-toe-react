@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --cell-size: 31%;
+    --cell-lg-size: 50%;
+    --cell-sm-size: 5%;
+    --spacer-size: calc( ( 100% - ( var(--cell-size) * 3 ) ) / 2);
+    --spacer-sm-size: calc( ( 100% - ( var(--cell-lg-size) * 3 ) ) / 2);
+    font-family: "Varela Round", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    color: white;
+}
+
+
+body {
+    margin: 0;
+    background-color: rgb(8, 4, 22);
+}
+
+.game {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.tic-tac-toe-symbol {
+    width: 80%;
+    height: 80%;
+}
+.tic-tac-toe-symbol.winning {
+    fill: lime;
+    filter: url(#glow)
+}
+.tic-tac-toe-x {
+    fill: #eb3f3f;
+}
+.tic-tac-toe-o {
+    fill: #3b3bd9;
+}

@@ -1,0 +1,52 @@
+.board-classic {
+    /* width: 400px;
+    height: 400px; */
+    /* width: min(calc(90vh - 50px), 90%); */
+    /* width: 80%; */
+    height: 80%;
+    aspect-ratio: 1;
+}
+
+.board-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: min(700px,90vw);
+}
+
+.board-classic--row {
+    display: flex;
+    width: 100%;
+    height: var(--cell-size);
+}
+
+.board-classic--cell {
+    width: var(--cell-size);
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.board-classic--cell.current-game {
+    background: radial-gradient(#8c8c8c, transparent 70%);
+}
+
+.board-classic--row-spacer {
+    height: var(--spacer-size);
+    width: 100%;
+    background-color: white;
+    border-radius: 100rem;
+}
+
+.board-classic--cell-spacer {
+    width: var(--spacer-size);
+    height: 100%;
+    background-color: white;
+}
+
+.board-classic--row:first-child .board-classic--cell-spacer {
+    border-radius: 100rem 100rem 0 0;
+}
+.board-classic--row:last-child .board-classic--cell-spacer {
+    border-radius: 0 0 100rem 100rem;
+}
