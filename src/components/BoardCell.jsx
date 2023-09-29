@@ -27,14 +27,4 @@ export default function BoardCell({value,handleCellClick}) {
             {value}
         </div>
     );
-
-    return props.isSuperBoard ? (
-        <div className="board-classic--cell">
-            <BoardClassic isSubBoard />
-        </div>
-    ) : (
-        <div className="board-classic--cell" onClick={handleCellClick}>
-            {content}
-        </div>
-    );
 }

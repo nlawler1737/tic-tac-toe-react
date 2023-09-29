@@ -10,12 +10,16 @@
     --spacer-sm-size: calc( ( 100% - ( var(--cell-lg-size) * 3 ) ) / 2);
     font-family: "Varela Round", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
     color: white;
+    --c-accent: rgb(132, 123, 155);
+    --c-highlight: rgb(181 153 255);
+    --c-primary: rgb(8, 4, 22);
+    --c-secondary: rgb(49, 32, 90);
 }
 
 
 body {
     margin: 0;
-    background-color: rgb(8, 4, 22);
+    background-color: var(--c-primary);
 }
 
 .game {

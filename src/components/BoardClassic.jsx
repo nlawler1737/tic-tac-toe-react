@@ -5,7 +5,6 @@ import BoardCell from "./BoardCell";
 import "./BoardClassic.css";
 
 export default function BoardClassic({
-    isSubBoard,
     cells,
 }) {
     // const [turn, setTurn] = useState(false);
