@@ -14,7 +14,7 @@ function putGameState(gameState, getUpdate) {
         })
     }).then(data=>data.json()).then(json=>{
         console.log("put",json.data)
-        return json.data
+        return json
     }).catch(err=>{
         console.error(err)
     })
@@ -25,7 +25,26 @@ function joinQueue() {
         method: "POST",
         headers: headers,
     }).then(data=>data.json()).then(json=>{
-        return json.data
+        console.log("joinQueue", json)
+        return json
+    })
+}
+
+function leaveQueue() {
+    return fetch("http://localhost:5500/leave-queue",{
+        method: "DELETE",
+        headers: headers,
+    }).then(data=>data.json()).then(json=>{
+        console.log("leaveQueue", json)
+        return json
+    })
+}
+
+function getUserData(userId) {
+    return fetch("http://localhost:5500/user/"+userId,{
+        method: "GET",
+    }).then(data=>data.json()).then(json=>{
+        return json
     })
 }
 
@@ -46,6 +65,7 @@ function authenticate(url, username, password, onErrFunc) {
             }
             localStorage.setItem("userjwt", json.data.jwt);
             localStorage.setItem("username", username)
+            localStorage.setItem("userid",json.data.id)
             window.location.href = "/";
         });
 }
@@ -63,4 +83,4 @@ function logout() {
     window.location.href = "/";
 }
 
-export { register, login, logout, joinQueue, putGameState };
+export { register, login, logout, joinQueue, putGameState,leaveQueue, getUserData };

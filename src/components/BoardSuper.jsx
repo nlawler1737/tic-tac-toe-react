@@ -1,11 +1,7 @@
 import BoardClassic from "./BoardClassic";
 
 export default function BoardSuper({ cells }) {
-    // console.log(cells);
-    // const boardCells = cells.map((a, i) => {
 
-    //     return <BoardClassic key={i} cells={a} />;
-    // });
     return (
         <div className={`board-classic`}>
             <div className="board-classic--row">

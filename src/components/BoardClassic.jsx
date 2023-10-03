@@ -7,17 +7,6 @@ import "./BoardClassic.css";
 export default function BoardClassic({
     cells,
 }) {
-    // const [turn, setTurn] = useState(false);
-    // const [values, setValues] = useState(Array(9).fill(null));
-    // const [winningValues, setWinningValues] = useState([])
-    //     const cells = values.map((a,i)=><BoardCell
-    //     key={i}
-    //     value={values[i]}
-    //     handleCellClick={() => handleCellClick(i)}
-    //     winning={winningValues.includes(i)}
-    // />)
-
-    // console.log(checkWinner(values))
 
     return (
         <div className="board-classic">

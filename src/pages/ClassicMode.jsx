@@ -3,12 +3,12 @@ import BoardClassic from "../components/BoardClassic";
 import BoardCell from "../components/BoardCell";
 import TicTacToeX from "../components/TicTacToeX";
 import TicTacToeO from "../components/TicTacToeO";
-import { joinQueue, putGameState } from "../utils/auth";
+import { joinQueue, leaveQueue, putGameState } from "../utils/auth";
 
 export default function ClassicMode() {
     const [gameData, setGameData] = useState({
         gameState: Array(9).fill(null),
-        gameStatus: "Loading...",
+        gameStatus: null,
         player: null,
         currentTurn: null,
         winner: null,
@@ -19,26 +19,20 @@ export default function ClassicMode() {
     // const [turn, setTurn] = useState(0);
     // const [values, setValues] = useState(Array(9).fill(null));
     const [winningValues, setWinningValues] = useState([]);
+    const [leaveQueueShown, setLeaveQueueShown] = useState(false);
+    const [joinQueueShown, setJoinQueueShown] = useState(true);
 
-    useEffect(() => {
-        if (gameData.player !== null) return;
-
-        joinQueue().then((data) => {
-            const { code } = data;
-            if (code == 1) {
-                console.log(gameData.gameState);
-                requestBoard(true);
-            }
-            // return
-            // setGameData(prev=>{
-            //     return {...prev,gameStatus:msg}
-            // })
-        });
-    });
+    useEffect(()=>{
+        if (gameData.player !== null) return
+        requestBoard(true)
+    })
 
     useEffect(() => {
         function onGameUpdate() {
             requestBoard(true);
+            setLeaveQueueShown(false)
+            setJoinQueueShown(false)
+            console.log("ping received")
         }
 
         globalThis.socket.on("game-start", onGameUpdate);
@@ -52,23 +46,21 @@ export default function ClassicMode() {
     });
 
     useEffect(() => {
+        function beforePageLeave(e) {
+            e.preventDefault()
+            leaveQueue()
+        }
+
         document.addEventListener("keydown", handleKeyPress, true);
+
+        window.addEventListener("beforeunload", beforePageLeave)
+        window.addEventListener("unload", beforePageLeave)
     });
-    // useEffect(() => {
-    //     requestBoard(gameData.gameState)
-    //     // console.log("use Effect")
-    //     // putGameState(values).then(data=>{
-    //     //     updateBoard(data)
-    //     //     // if (JSON.stringify(data.gameState) != JSON.stringify(values)) setValues(data.gameState)
-    //     //     // setTurn(data.gameState.filter((a) => a != null).length % 2);
-    //     //     // checkWinner(values)
-    //     // });
-    // }, [values]);
 
     function requestBoard(update = false, values = gameData.gameState) {
         console.log("request sent", values);
-        putGameState(values, update).then((data) => {
-            console.log(data);
+        putGameState(values, update).then(({ data }) => {
+            if (!data.gameState) return
             setGameData((prev) => {
                 return {
                     ...prev,
@@ -81,25 +73,16 @@ export default function ClassicMode() {
                 };
             });
             checkWinner(data.gameState);
-            // updateBoard(data)
+            setJoinQueueShown(false)
+            setLeaveQueueShown(false)
         });
     }
 
-    // function updateBoard(data) {
-    //     // if (JSON.stringify(data.gameState) != JSON.stringify(values)) setValues(data.gameState)
-    //     // if (data.err) return
-    //     // setGameStatus(data.gameStatus)
-    //     // setPlayer(data.player)
-    //     // setTurn(data.gameState.filter((a) => a != null).length % 2);
-    // }
-    // 1 x
-    // 2 o
     if (!localStorage.getItem("userjwt")) {
         window.location.href = "/login";
         return;
     }
-    // globalThis.socket.emit("move-played",{msg:"hi"})
-    // console.log(values)
+
     const cells = gameData.gameState.map((a, i) => {
         const value = gameData.gameState[i];
         const winning = winningValues.includes(i);
@@ -117,14 +100,6 @@ export default function ClassicMode() {
             />
         );
     });
-
-    // function getGameStatus() {
-    //     const playerMap = { 0: "X", 1: "O" };
-    //     if (winningValues[0] === -1) return "Draw";
-    //     if (winningValues.length && winningValues.length === 3)
-    //         return `${playerMap[turn === 0 ? 1 : 0]} Wins`;
-    //     setGameStatus(playerMap[turn] + "'s Turn");
-    // }
 
     function handleKeyPress(e) {
         const indexMap = {
@@ -147,19 +122,40 @@ export default function ClassicMode() {
 
     function handleCellClick(id) {
         if (gameData.player === null) return;
-        // console.log(gameData.player, values.filter(a=>a!=null).length % 2, values.filter(a=>a!=null).length)
-        // if (gameData.gameState.filter(a=>a!=null).length % 2 !== gameData.player) return
         if (gameData.currentTurn !== gameData.player) return;
         if (winningValues.length || gameData.gameState[id] != null) return;
         document.removeEventListener("keydown", handleKeyPress, true);
         const newVals = gameData.gameState.slice();
         newVals[id] = gameData.player;
-        // console.log(newVals)
         requestBoard(false, newVals);
 
-        // checkWinner(newVals);
-        // setTurn(turn === 1 ? 0 : 1);
-        // setValues(newVals);
+    }
+
+    function handleJoinQueueClick() {
+        joinQueue().then(({ data, error }) => {
+            if (error) return;
+            const { code, msg } = data;
+            console.log(data)
+            if (code == 1) {
+                requestBoard(true);
+            }
+            setGameData((prev) => {
+                return { ...prev, gameStatus: msg };
+            });
+            setLeaveQueueShown(true);
+            setJoinQueueShown(false);
+        });
+    }
+
+    function handleLeaveQueueClick() {
+        leaveQueue().then((data) => {
+            if (data.error) return;
+            setLeaveQueueShown(false);
+            setJoinQueueShown(true);
+            setGameData((prev) => {
+                return { ...prev, gameStatus: null };
+            });
+        });
     }
 
     function checkWinner(squares) {
@@ -194,8 +190,25 @@ export default function ClassicMode() {
     }
     return (
         <div className="game game-classic">
-            {/* <BoardClassic isSuperBoard/> */}
-            <div className="gameStatus">{gameData.gameStatus}</div>
+            {leaveQueueShown && (
+                <div
+                    className="leave-queue button"
+                    onClick={handleLeaveQueueClick}
+                >
+                    Leave Queue
+                </div>
+            )}
+            {joinQueueShown && (
+                <div
+                    className="join-queue button"
+                    onClick={handleJoinQueueClick}
+                >
+                    Join Queue
+                </div>
+            )}
+            {gameData.gameStatus && (
+                <div className="gameStatus">{gameData.gameStatus}</div>
+            )}
             <div className="board-container">
                 <BoardClassic {...{ cells }} />
             </div>

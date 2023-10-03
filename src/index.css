@@ -27,6 +27,14 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: 10px;
+}
+
+.button {
+    border-radius: 100rem;
+    background-color: var(--c-secondary);
+    padding: 10px 20px;
+    cursor: pointer;
 }
 
 .tic-tac-toe-symbol {
