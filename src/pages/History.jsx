@@ -20,6 +20,16 @@ export default function History() {
 
     if (!userData) return <div>Loading User Data...</div>;
 
+    console.log(userData)
+    if (userData.history.length <= 1) return (
+        <div className="history">
+            <div className="history--logout" onClick={logout}>Logout</div>
+            <br />
+            <div>No Games Played</div>
+        </div>
+        
+    )
+
     return <div className="history">
         <div className="history--logout" onClick={logout}>Logout</div>
         <div className="history--totals">

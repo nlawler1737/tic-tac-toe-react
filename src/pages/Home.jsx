@@ -8,10 +8,10 @@ export default function Home() {
                     <div className="play-button--subtitle">Play</div>
                     <div className="play-button--title">Classic</div>
                 </a>
-                <a id="play-super-button" className="play-button" href="/super">
+                {/* <a id="play-super-button" className="play-button" href="/super">
                     <div className="play-button--subtitle">Play</div>
                     <div className="play-button--title">Super</div>
-                </a>
+                </a> */}
             </div>
         </div>
     );
